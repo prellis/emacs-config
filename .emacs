@@ -59,8 +59,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; rust-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'rust-mode)
-(setq rust-format-on-save t)
+;; (require 'rust-mode)
+;; (setq rust-format-on-save t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; c-mode
@@ -189,7 +189,7 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Load the default saved emacs session
-(desktop-load-default)
+;; (desktop-load-default)
 
 ;; Disabled functions
 (put 'narrow-to-region 'disabled nil)
@@ -198,15 +198,30 @@
 
 ;; The following lines are always needed. Choose your own keys.
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq org-plantuml-jar-path
+                  (expand-file-name "C:/users/pellis/Downloads/plantuml.jar"))
+            (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+            (org-babel-do-load-languages 'org-babel-load-languages
+                                         '((plantuml . t)))
+            (setq org-ditaa-jar-path "C:/users/pellis/Downloads/ditaa.jar")
+            (org-babel-do-load-languages 'org-babel-load-languages
+                                         '((ditaa . t)))
+            (setq explicit-shell-file-name "C:/Program Files/Git/bin/sh.exe")
+            (org-babel-do-load-languages 'org-babel-load-languages
+                                         '((shell . t)))
+            (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+            (org-babel-do-load-languages 'org-babel-load-languages
+                                         '((dot . t)))))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-log-done 'time)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                               EOF                                    ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; FiraCode font was obtained from https://github.com/tonsky/FiraCode/
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -216,16 +231,22 @@
  '(grep-command "grep -nie ")
  '(grep-find-command
    "find . -name \"*.[cChHsS]\" -print0 | xargs -0 -e grep -nie ")
- '(package-selected-packages (quote (rust-mode magit)))
- '(revert-without-query (quote ("1")))
+ '(markdown-command
+   "C:/Users/pellis/AppData/Local/Pandoc/pandoc.exe --standalone -t html5")
+ '(org-beamer-environments-extra '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
+ '(org-confirm-babel-evaluate nil)
+ '(package-selected-packages
+   '(graphviz-dot-mode markdown-mode lua-mode plantuml-mode rust-mode magit))
+ '(revert-without-query '("1"))
+ '(shell-file-name "C:/Program Files/Git/bin/sh.exe")
  '(show-paren-mode t)
  '(tool-bar-mode nil)
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+ '(uniquify-buffer-name-style 'forward nil (uniquify)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "SystemWindow" :foreground "SystemWindowText" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "outline" :family "Anonymous Pro")))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "SystemWindow" :foreground "SystemWindowText" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "outline" :family "Fira Code Retina")))))
 
 (global-set-key (kbd "M-<return>") 'complete-tag)
